@@ -1,0 +1,14 @@
+{
+  "name": "grocery-list-api",
+  "version": "1.0.0",
+  "description": "API supporting grocery-list web app.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^15.0.3"
+  }
+}
