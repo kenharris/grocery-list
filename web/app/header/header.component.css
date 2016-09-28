@@ -1,0 +1,27 @@
+#nav-bar {
+  background: #2d8721;
+  color: white;
+  border-radius: 0;
+  -moz-border-radius: 0;
+  -webkit-border-radius: 0;
+  margin-bottom: 0;
+  font-weight: bold;
+}
+
+#nav-bar .navbar-header a {
+  padding: 15px !important;
+}
+
+#nav-bar li a:hover,
+#nav-bar li a:active {
+  background: #1f4f19;
+}
+
+#nav-bar a {
+  color: white;
+  text-decoration: none;
+}
+
+.nav-bar-right {
+  float: right;
+}

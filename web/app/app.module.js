@@ -16,13 +16,16 @@ var app_routes_1 = require('./app.routes');
 var home_component_1 = require('./home/home.component');
 var login_component_1 = require('./login/login.component');
 var grocery_component_1 = require('./grocery/grocery.component');
+var header_component_1 = require('./header/header.component');
+var footer_component_1 = require('./footer/footer.component');
 var AppModule = (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
             imports: [platform_browser_1.BrowserModule, router_1.RouterModule.forRoot(app_routes_1.routes)],
-            declarations: [app_component_1.AppComponent, home_component_1.HomeComponent, login_component_1.LoginComponent, grocery_component_1.GroceryComponent],
+            declarations: [app_component_1.AppComponent, home_component_1.HomeComponent, login_component_1.LoginComponent,
+                grocery_component_1.GroceryComponent, header_component_1.HeaderComponent, footer_component_1.FooterComponent],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])

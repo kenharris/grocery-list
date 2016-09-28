@@ -1,1 +1,44 @@
-Login Component!
+<div id="loginBox" style="margin-top: 50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <div class="panel-title">Sign In</div>
+      <div style="float: right; font-size: 80%; position: relative; top: -10px">
+        <a href="#">Forgot password?</a>
+      </div>
+    </div>
+    <div style="padding-top:30px" class="panel-body">
+      <div style="display: none" id="login-alert" class="alert alert-danger col-sm-12"></div>
+      <form action="/sign-in" class="form-horizontal" method="post" role="form"><input name="__RequestVerificationToken" type="hidden" value="_aabKln42CnEYovJL-7q8AKVb58y62pcKqlp5Hc-Tlpb5zHyQFe08nK1e_GL4LlMN2J1jkniBa1ofM-BcMLJ2hSFfSMZuc5J3rQhYen8YDE1">
+        <div>
+          <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
+        </div>
+        <div style="margin-bottom: 25px" class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+          <input class="form-control" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Email" name="Email" placeholder="email address" type="text" value="">
+        </div>
+        <div>
+          <span class="field-validation-valid text-danger" data-valmsg-for="Password" data-valmsg-replace="true"></span>
+        </div>
+        <div style="margin-bottom: 25px" class="input-group">
+          <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+          <input class="form-control" data-val="true" data-val-required="The Password field is required." id="Password" name="Password" placeholder="password" type="password">
+        </div>
+        <div style="margin-top: 10px" class="form-group">
+          <!-- Button -->
+          <div class="col-sm-12 controls">
+            <input type="submit" value="Sign In" class="btn btn-success pull-right">
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-12 control">
+            <div style="border-top: 1px solid #888; padding-top: 15px; font-size: 85%">
+              Don't have a Grocery account?
+              &nbsp;
+              <a [routerLink]="['/create-account']">Create one here.</a>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

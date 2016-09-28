@@ -10,9 +10,7 @@ h2, h3 {
   font-weight: lighter;
 }
 body {
-  margin: 2em;
-  background: url(images/site-bg.jpg);
-  background-position: fixed;
+  margin: 2em;  
 }
 body, input[text], button {
   color: #888;

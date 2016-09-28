@@ -1,0 +1,25 @@
+.jumbotron {
+  /*
+  background: url(images/site-bg.jpg);
+  background-position: fixed;
+  */
+  overflow: hidden;
+  position: relative;
+}
+
+.jumbotron img {
+  opacity: .5;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+  height: auto;
+}
+
+.jumbotron .container {
+  position: relative;
+  z-index: 2;
+  opacity: 1;
+  color: black;
+}
