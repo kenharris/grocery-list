@@ -1,0 +1,28 @@
+.add-list {
+    margin-bottom: 25px;
+}
+
+.add-list button {
+    float: right;
+    padding: 5px 15px;
+}
+
+.existing-list {
+    padding: 10px 0;
+}
+
+.existing-list a.list-name {
+    font-size: 24px;
+    text-transform: uppercase;
+}
+
+.existing-list a.list-name:hover {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.existing-list a.remove {
+    float: right;
+    color: red;
+    margin-top: 10px;
+}

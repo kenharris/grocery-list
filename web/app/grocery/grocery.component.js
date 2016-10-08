@@ -9,15 +9,46 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var UserService_1 = require('../services/UserService');
 var GroceryComponent = (function () {
-    function GroceryComponent() {
+    function GroceryComponent(userService) {
+        this.userService = userService;
     }
+    GroceryComponent.prototype.ngOnInit = function () { this.getLists(); };
+    GroceryComponent.prototype.getLists = function () {
+        var _this = this;
+        this.userService
+            .getUser()
+            .then(function (user) { return _this.user = user; });
+    };
+    GroceryComponent.prototype.newList = function () {
+        var _this = this;
+        this.userService
+            .createList(this.newListName)
+            .then(function (user) { return _this.user = user; });
+        this.newListName = '';
+    };
+    GroceryComponent.prototype.listNameKeypress = function (e) {
+        if (e.keyCode !== 13)
+            return;
+        if (this.newListName == null || this.newListName == '')
+            return;
+        this.newList();
+    };
+    GroceryComponent.prototype.removeList = function (listId) {
+        var _this = this;
+        this.userService
+            .removeList(listId)
+            .then(function (user) { return _this.user = user; });
+    };
     GroceryComponent = __decorate([
         core_1.Component({
             selector: 'my-grocery',
-            templateUrl: './app/grocery/grocery.component.html'
+            templateUrl: './app/grocery/grocery.component.html',
+            styleUrls: ['./app/grocery/grocery.component.css'],
+            providers: [UserService_1.UserService]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [UserService_1.UserService])
     ], GroceryComponent);
     return GroceryComponent;
 }());

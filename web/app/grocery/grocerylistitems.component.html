@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12 text-center">
+      <h1>{{ groceryList?.name }}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-12">
+      <div *ngFor="let item of groceryList?.items; let idx = index" class="row grocery-item">
+        <div class="col-sm-6 col-sm-offset-3">
+          <input [attr.id]="'chk-' + idx" 
+                 type="checkbox"
+                 (change)="toggleItemCompleted(item.id)" />
+          <label [attr.for]="'chk-' + idx"
+                 [ngClass]="{'completed':item.completed}">
+                  {{ item.name }} - {{ item.quantity }}
+          </label>
+          <a (click)="removeItem(item.id)"><i class="glyphicon glyphicon-remove"></i></a>
+        </div>
+        <div class="col-sm-3">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+  <div class="row new-item">
+    <div class="col-sm-6 col-sm-offset-3 end">
+      <input type="text" [(ngModel)]="newItemName" (keypress)="listItemKeypress($event)"/>
+      <button (click)="newItem()" class="btn btn-success">Add Item</button>
+    </div>
+  </div>
+</div>

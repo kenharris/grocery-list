@@ -1,30 +1,32 @@
 'use strict';
 
 const Hapi = require('hapi');
+var dbOpts = {
+    "url": "mongodb://groceryListUser:Gr0c3ryL15tPa55w0rd@localhost:27017/grocery",
+    "settings": {
+        "db": {
+            "native_parser": false
+        }
+    }
+};
 
 const server = new Hapi.Server();
-server.connection({ port: 3001 });
-
-server.route({
-    method: 'GET',
-    path: '/',
-    handler: function (request, reply) {
-        reply('Hello, world!');
-    }
-});
-
-server.route({
-    method: 'GET',
-    path: '/{name}',
-    handler: function (request, reply) {
-        reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
-    }
-});
-
-server.start((err) => {
-
+server.register({
+    register: require('hapi-mongodb'),
+    options: dbOpts
+}, function (err) {
     if (err) {
+        console.error(err);
         throw err;
     }
-    console.log(`Server running at: ${server.info.uri}`);
+
+    server.connection({ port: 3002 });
+    server.route(require('./routes'));
+
+    server.start((err) => {
+        if (err) {
+            throw err;
+        }
+        console.log(`Server running at: ${server.info.uri}`);
+    });
 });

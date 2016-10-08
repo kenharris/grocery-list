@@ -15,7 +15,8 @@ var FooterComponent = (function () {
     FooterComponent = __decorate([
         core_1.Component({
             selector: 'gl-footer',
-            templateUrl: './app/footer/footer.component.html'
+            templateUrl: './app/footer/footer.component.html',
+            styleUrls: ['./app/footer/footer.component.css']
         }), 
         __metadata('design:paramtypes', [])
     ], FooterComponent);

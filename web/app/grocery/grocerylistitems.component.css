@@ -1,0 +1,31 @@
+.completed {
+  text-decoration: line-through;
+  font-weight: lighter;
+  font-style: italic;
+}
+
+h1 {
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+
+.grocery-item {
+  margin-bottom: 5px;
+}
+
+.grocery-item a {
+  float: right;
+  color: red;
+}
+
+.new-item {
+  margin-bottom: 25px;
+}
+
+.new-item input[type=text] {
+  margin-top: 10px;
+}
+
+.new-item button {
+  float: right;
+}

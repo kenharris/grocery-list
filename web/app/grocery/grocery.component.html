@@ -1,1 +1,28 @@
-Grocery Component!
+<div class="row">
+  <div class="col-sm-12">
+    <h1>Grocery Lists</h1>
+    <p>Below are the grocery lists on your account currently.  From this screen you can:</p>
+    <ul>
+      <li>Add a new list</li>
+      <li>Edit a list by clicking on its name</li>
+      <li>Delete an existing list</li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-12 text-center">
+    <h2>Your Lists</h2>
+  </div>
+</div>
+<div class="row existing-list" *ngFor="let list of user?.lists">
+  <div class="col-sm-6 col-sm-offset-3 end">
+    <a [routerLink]="['/grocery/list', list.id]" class="list-name">{{ list.name }}</a>
+    <a (click)="removeList(list.id)" class="remove"><i class="glyphicon glyphicon-remove"></i></a>
+  </div>
+</div>
+<div class="row add-list">
+  <div class="col-sm-6 col-sm-offset-3 end">
+    <input type="text" [(ngModel)]="newListName" (keypress)="listNameKeypress($event)" #newListElement />
+    <button (click)="newList()" class="btn btn-success">Add List</button>
+  </div>
+</div>

@@ -1,11 +1,18 @@
-<div id="nav-bar" class="navbar">
+<div class="navbar navbar-default">
   <div class="container">
     <div class="navbar-header">
-      <a [routerLink]="['/']" style="padding: 7px 15px;" class="navbar-brand">Grocery App</a>
+      <a [routerLink]="['/']" class="navbar-brand">Grocery App</a>
     </div>
-    <div class="navbar-collapse">
+    <div class="navbar-collapse collapse" id="navbar-main">
       <ul class="nav navbar-nav">
+        <li>
+          <a [routerLink]="['/grocery']">Grocery Lists</a>
+        </li>
+        <li>
+          <a href="http://news.bootswatch.com">Blog</a>
+        </li>
       </ul>
+
       <ul class="nav navbar-nav navbar-right">
         <li><a [routerLink]="['/login']">Sign In</a></li>
         <li><a [routerLink]="['/create-account']">Create Account</a></li>

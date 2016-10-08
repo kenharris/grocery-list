@@ -10,7 +10,7 @@ h2, h3 {
   font-weight: lighter;
 }
 body {
-  margin: 2em;  
+  background: #128f76;
 }
 body, input[text], button {
   color: #888;
@@ -139,4 +139,12 @@ nav a.router-link-active {
 /* everywhere else */
 * {
   font-family: Arial, Helvetica, sans-serif;
+}
+
+#body-container {
+  background: white;
+}
+
+.navbar {
+  margin-bottom: 0;
 }
