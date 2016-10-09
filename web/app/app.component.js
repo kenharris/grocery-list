@@ -10,13 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 require('./rxjs-operators');
+var cookies_service_1 = require('angular2-cookie/services/cookies.service');
 var AppComponent = (function () {
     function AppComponent() {
     }
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            templateUrl: './app/app.component.html'
+            templateUrl: './app/app.component.html',
+            providers: [cookies_service_1.CookieService]
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);

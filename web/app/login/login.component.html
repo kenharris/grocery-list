@@ -1,44 +1,84 @@
-<div id="loginBox" style="margin-top: 50px;" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <div class="panel-title">Sign In</div>
-      <div style="float: right; font-size: 80%; position: relative; top: -10px">
-        <a href="#">Forgot password?</a>
+<div class="row">
+  <div class="col-sm-12 col-md-6">
+    <div class="row">
+      <div class="col-md-offset-2 col-sm-12 col-md-8 end">
+        <p class="lead"><strong><em>Already registered?</em></strong><br />Just enter your email address and 
+          password below and get access to your lists!</p>
+        <div class="panel panel-primary">
+          <div class="panel-heading">Log In</div>
+          <div class="panel-body">
+            <form (ngSubmit)="login(lEmail.value, lPassword.value, signupForm.valid)" #loginForm="ngForm">
+              <fieldset>
+                <legend>Log In</legend>
+                <div [hidden]="!loginError" class="alert alert-danger">{{ loginErrorMessage }}</div>
+                <div class="form-group" 
+                      [ngClass]="{'has-success': lEmail.valid, 'has-error': !lEmail.valid && !lEmail.pristine}">
+                  <label class="control-label col-sm-4 col-md-12" for="login-email">Email:</label>
+                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" 
+                          name="loginEmail" required type="email" id="login-email" 
+                          [(ngModel)]="loginEmail" #lEmail="ngModel" />
+                </div>
+                <div class="form-group"
+                      [ngClass]="{'has-success': lPassword.valid}">
+                  <label class="control-label col-sm-4 col-md-12" for="login-password">Password:</label>
+                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" 
+                          name="loginPassword" required type="password" id="login-password" 
+                          [(ngModel)]="loginPassword" #lPassword="ngModel" />
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-12 text-right">
+                    <button class="btn btn-primary" [disabled]="!loginForm.form.valid">Log In</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
-    <div style="padding-top:30px" class="panel-body">
-      <div style="display: none" id="login-alert" class="alert alert-danger col-sm-12"></div>
-      <form action="/sign-in" class="form-horizontal" method="post" role="form"><input name="__RequestVerificationToken" type="hidden" value="_aabKln42CnEYovJL-7q8AKVb58y62pcKqlp5Hc-Tlpb5zHyQFe08nK1e_GL4LlMN2J1jkniBa1ofM-BcMLJ2hSFfSMZuc5J3rQhYen8YDE1">
-        <div>
-          <span class="field-validation-valid text-danger" data-valmsg-for="Email" data-valmsg-replace="true"></span>
-        </div>
-        <div style="margin-bottom: 25px" class="input-group">
-          <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-          <input class="form-control" data-val="true" data-val-email="The Email field is not a valid e-mail address." data-val-required="The Email field is required." id="Email" name="Email" placeholder="email address" type="text" value="">
-        </div>
-        <div>
-          <span class="field-validation-valid text-danger" data-valmsg-for="Password" data-valmsg-replace="true"></span>
-        </div>
-        <div style="margin-bottom: 25px" class="input-group">
-          <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-          <input class="form-control" data-val="true" data-val-required="The Password field is required." id="Password" name="Password" placeholder="password" type="password">
-        </div>
-        <div style="margin-top: 10px" class="form-group">
-          <!-- Button -->
-          <div class="col-sm-12 controls">
-            <input type="submit" value="Sign In" class="btn btn-success pull-right">
+  </div>
+  <div class="col-sm-12 col-md-6">
+    <div class="row">
+      <div class="col-md-offset-2 col-sm-12 col-md-8 end">
+        <p class="lead"><strong><em>Don't have an account yet?</em></strong><br />Just enter your email address 
+          and choose a password below and join our site!</p>
+        <div class="panel panel-primary">
+          <div class="panel-heading">Sign Up</div>
+          <div class="panel-body">
+            <form (ngSubmit)="signup(sEmail.value, sPassword.value, signupForm.valid)" #signupForm="ngForm">
+              <fieldset>
+                <legend>Sign Up</legend>
+                <div class="form-group"
+                      [ngClass]="{'has-success': sEmail.valid, 'has-error': !sEmail.valid && !sEmail.pristine}">
+                  <label class="control-label col-sm-4 col-md-12" for="signup-email">Email:</label>
+                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" 
+                          name="sEmail" type="email" id="signup-email" required 
+                          [(ngModel)]="signupEmail" #sEmail="ngModel" />
+                </div>
+                <div class="form-group"
+                      [ngClass]="{'has-success': sPassword.valid, 'has-error': !sPassword.valid && !sPassword.pristine}">
+                  <label class="control-label col-sm-4 col-md-12" for="signup-password">Password:</label>
+                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" name="sPassword" 
+                          type="password" id="signup-password" required validateEqual="sConfirm" reverse="true"
+                          [(ngModel)]="signupPassword" #sPassword="ngModel" />
+                </div>
+                <div class="form-group"
+                      [ngClass]="{'has-success': sConfirm.valid, 'has-error': !sConfirm.valid && !sConfirm.pristine}">
+                  <label class="control-label col-sm-4 col-md-12" for="signup-confirmpassword">Confirm Password:</label>
+                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" name="sConfirm"
+                          type="password" id="signup-confirmpassword" required validateEqual="sPassword"
+                          [(ngModel)]="signupConfirmPassword" #sConfirm="ngModel" />
+                </div>
+                <div class="form-group">
+                  <div class="col-sm-12 text-right">
+                    <button class="btn btn-primary" [disabled]="!signupForm.form.valid">Sign Up</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
           </div>
         </div>
-        <div class="form-group">
-          <div class="col-md-12 control">
-            <div style="border-top: 1px solid #888; padding-top: 15px; font-size: 85%">
-              Don't have a Grocery account?
-              &nbsp;
-              <a [routerLink]="['/create-account']">Create one here.</a>
-            </div>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
