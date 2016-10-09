@@ -21,49 +21,59 @@ var UserService = (function () {
         this.apiUsersUrl = this.apiUrl + '/users';
     }
     UserService.prototype.getUser = function () {
-        return this.http.get(this.apiListsUrl)
+        var headers = new http_1.Headers();
+        headers.append('Authorization', this.cookieService.get('token'));
+        return this.http.get(this.apiListsUrl, { headers: headers })
             .map(this.extractData)
             .toPromise()
             .catch(this.handleError);
     };
     UserService.prototype.createList = function (listName) {
-        return this.http.post(this.apiListsUrl, JSON.stringify({ 'listName': listName }))
+        var headers = new http_1.Headers();
+        headers.append('Authorization', this.cookieService.get('token'));
+        return this.http.post(this.apiListsUrl, JSON.stringify({ 'listName': listName }), { headers: headers })
             .map(this.extractData)
             .toPromise()
             .catch(this.handleError);
     };
     UserService.prototype.removeList = function (listId) {
+        var headers = new http_1.Headers();
+        headers.append('Authorization', this.cookieService.get('token'));
         var deleteUrl = this.apiListsUrl + '/' + listId;
-        return this.http.delete(deleteUrl)
+        return this.http.delete(deleteUrl, { headers: headers })
             .map(this.extractData)
             .toPromise()
             .catch(this.handleError);
     };
     UserService.prototype.addItemToList = function (listId, listItem) {
+        var headers = new http_1.Headers();
+        headers.append('Authorization', this.cookieService.get('token'));
         var postUrl = this.apiListsUrl + '/' + listId;
-        return this.http.post(postUrl, listItem)
+        return this.http.post(postUrl, listItem, { headers: headers })
             .map(this.extractData)
             .toPromise()
             .catch(this.handleError);
     };
     UserService.prototype.removeItemFromList = function (listId, itemId) {
+        var headers = new http_1.Headers();
+        headers.append('Authorization', this.cookieService.get('token'));
         var deleteUrl = this.apiListsUrl + '/' + listId + '/' + itemId;
-        return this.http.delete(deleteUrl)
+        return this.http.delete(deleteUrl, { headers: headers })
             .map(this.extractData)
             .toPromise()
             .catch(this.handleError);
     };
     UserService.prototype.updateListItem = function (listId, itemId, item) {
+        var headers = new http_1.Headers();
+        headers.append('Authorization', this.cookieService.get('token'));
         var apiUrl = this.apiListsUrl + '/' + listId + '/' + itemId;
-        return this.http.put(apiUrl, item)
+        return this.http.put(apiUrl, item, { headers: headers })
             .map(this.extractData)
             .toPromise()
             .catch(this.handleError);
     };
     UserService.prototype.signUp = function (email, password) {
         var apiUrl = this.apiUsersUrl;
-        console.log(JSON.stringify({ 'email': email, 'password': password }));
-        console.log({ 'email': email, 'password': password });
         return this.http.post(apiUrl, JSON.stringify({ 'email': email, 'password': password }))
             .map(this.extractData)
             .toPromise()
@@ -71,8 +81,6 @@ var UserService = (function () {
     };
     UserService.prototype.authenticate = function (email, password) {
         var apiUrl = this.apiUsersUrl + '/authenticate';
-        console.log(JSON.stringify({ 'email': email, 'password': password }));
-        console.log({ 'email': email, 'password': password });
         return this.http.post(apiUrl, JSON.stringify({ 'email': email, 'password': password }))
             .map(this.extractData)
             .toPromise()
@@ -84,10 +92,10 @@ var UserService = (function () {
         return body || {};
     };
     UserService.prototype.handleError = function (error) {
-        console.log(error);
+        var responseBody = JSON.parse(error._body);
         // In a real world app, we might use a remote logging infrastructure
         // We'd also dig deeper into the error to get a better message
-        var errMsg = (error.message) ? error.message :
+        var errMsg = (responseBody.message) ? responseBody.message :
             error.status ? error.status + " - " + error.statusText : 'Server error';
         console.error(errMsg); // log to console instead
         return Observable_1.Observable.throw(errMsg).toPromise();

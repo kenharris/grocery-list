@@ -18,11 +18,19 @@ var LoginComponent = (function () {
         this.cookieService = cookieService;
         this.router = router;
         this.loginError = false;
+        this.signupError = false;
     }
     LoginComponent.prototype.signup = function (email, password, isValid) {
+        var _this = this;
         this.userService
             .signUp(email, password)
-            .then(function (userData) { return console.log(userData); });
+            .then(function (tokenData) {
+            _this.cookieService.put('token', tokenData.token);
+            _this.router.navigate(['/grocery']);
+        }, function (error) {
+            _this.signupError = true;
+            _this.signupErrorMessage = error;
+        });
     };
     LoginComponent.prototype.login = function (email, password, isValid) {
         var _this = this;

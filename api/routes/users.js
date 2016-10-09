@@ -7,6 +7,7 @@ var superSecret = 'Th1515@P@55w0rdS3cr3t';
 
 var createUser = function(request, reply) {
   var db = request.server.plugins['hapi-mongodb'].db;
+
   console.log(request.payload);
   var userInfo = JSON.parse(request.payload);
 
@@ -14,45 +15,58 @@ var createUser = function(request, reply) {
 
   db.collection('users').findOne({'email':userInfo.email}, function (err, user) {
     if (err) return console.error(err);
-    return null;
-  });
-
-  var saltRounds = 10;
-  bcrypt.genSalt(saltRounds, function(err, salt) {
-    if (err) return console.error(err);
-    bcrypt.hash(userInfo.password, salt, function(err, hash) {
-      userInfo.password = hash;
-      var token = jwt.sign({'email': userInfo.email}, superSecret, {
-        expiresIn: "24h"
-      });
-      userInfo.token = token;
-      console.log(userInfo);
-      console.log(token);
-      db.collection('users').insert(userInfo, function(err, user) {
+    if (user == null) {
+      var saltRounds = 10;
+      bcrypt.genSalt(saltRounds, function(err, salt) {
         if (err) return console.error(err);
-        console.log(user);
-        reply({'token': token});
-      }); 
-    });
+        bcrypt.hash(userInfo.password, salt, function(err, hash) {
+          userInfo.password = hash;
+          db.collection('users').insert(userInfo, function(err, result) {
+            if (err) return console.error(err);
+            
+            var token = _authenticate(userInfo.email, userInfo.password, db, function(token) {
+              if (token) reply({'token': token});
+              else reply(Boom.unauthorized());
+            });
+          }); 
+        });
+      });
+    } else {
+      reply(Boom.badRequest('account already exists with that email address.'));
+    }
   });
 
-  Boom.unauthorized();
 };
 
 var authenticateUser = function(request, reply) {
   var db = request.server.plugins['hapi-mongodb'].db;
   var userInfo = JSON.parse(request.payload);
 
-  db.collection('users').findOne({'email':userInfo.email}, function (err, user) {
-    if (err) return console.error(err);
-    console.log(user);
-    bcrypt.compare(userInfo.password, user.password, function(err, res) {
-        if (err) return console.error(err);
-        if (res) reply({'token': user.token});
-        else reply(Boom.unauthorized());
-    });
+  var token = _authenticate(userInfo.email, userInfo.password, db, function(token) {
+    console.log("2: " + token);
+
+    if (token) reply({'token': token});
+    else reply(Boom.unauthorized());
   });
 };
+
+var _authenticate = function(email, password, db, callback) {
+  db.collection('users').findOne({'email':email}, function (err, user) {
+    if (err) { callback(console.error(err)); return; }
+    bcrypt.compare(password, user.password, function(err, res) {
+        if (err) { callback(console.error(err)); return; }
+
+        var token = jwt.sign({ }, superSecret, {
+          subject: user._id.toString(),
+          expiresIn: "24h"
+        });
+        console.log("1: " + token);
+
+        callback(token);
+        return;
+    });
+  });
+}
 
 module.exports = [
     {

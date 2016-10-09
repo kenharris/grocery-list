@@ -1,106 +1,151 @@
 var uuid = require('uuid');
+var jwt = require('jsonwebtoken');
+var Boom = require('boom');
+
+var superSecret = 'Th1515@P@55w0rdS3cr3t';
 
 var getLists = function(request, reply) {
   var db = request.server.plugins['hapi-mongodb'].db;
-  db.collection('users').findOne({}, function (err, grocLists) {
-    if (err) return console.error(err);
-    reply(grocLists);
+  var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+
+  verifyToken(request, function(_id) {
+    if (!_id || _id === null) { reply(Boom.unauthorized()); }
+
+    db.collection('users').findOne({ '_id': new ObjectID(_id) }, function (err, grocLists) {
+      if (err) return console.error(err);
+      reply(grocLists);
+      return;
+    });
   });
 };
 
 var createList = function(request, reply) {
   var db = request.server.plugins['hapi-mongodb'].db;
+  var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+
   const listName = JSON.parse(request.payload).listName;
 
-  db.collection('users').findOne({}, function (err, user) {
-    if (err) return console.error(err);
-    user.lists.push({id: uuid.v4(), name: listName});
-    db.collection('users').update({}, user, {upsert: true});
-    reply(user);
+  verifyToken(request, function(_id) {
+    if (!_id || _id === null) { reply(Boom.unauthorized()); return; }
+    
+    db.collection('users').findOne({ '_id': new ObjectID(_id) }, function (err, user) {
+      if (err) return console.error(err);
+      if (!user.lists) { user.lists = []; }
+      user.lists.push({id: uuid.v4(), name: listName});
+      db.collection('users').update({ '_id': new ObjectID(_id) }, user, {upsert: true});
+      reply(user);
+    });
   });
 };
 
 var removeList = function(request, reply) {
   var db = request.server.plugins['hapi-mongodb'].db;
-  const listId = request.params.listId;
+  var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
 
-  db.collection('users').findOne({}, function (err, user) {
-    if (err) return console.error(err);
-    user.lists = user.lists.filter(function(thisList) {
-      return thisList.id != listId;
+  const listId = request.params.listId;
+  verifyToken(request, function(_id) {
+    if (!_id || _id === null) { reply(Boom.unauthorized()); }
+    
+    db.collection('users').findOne({ '_id': new ObjectID(_id) }, function (err, user) {
+      if (err) return console.error(err);
+      user.lists = user.lists.filter(function(thisList) {
+        return thisList.id != listId;
+      });
+      db.collection('users').update({ '_id': new ObjectID(_id) }, user);
+      reply(user);
     });
-    db.collection('users').update({}, user);
-    reply(user);
   });
 };
 
 var addItemToList = function(request, reply) {
   var db = request.server.plugins['hapi-mongodb'].db;
+  var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
+
   const listId = request.params.listId;
   var newItem = request.payload;
   if (!newItem.id || newItem.id == null || newItem.id.length == 0) {
     newItem.id = uuid.v4();
   }
 
-  db.collection('users').findOne({}, function (err, user) {
-    if (err) return console.error(err);
-    user.lists.forEach(function(userList) {
-      if (userList.id === listId) {
-        if (!userList.items) { userList.items = []; }
-        userList.items.push(newItem);
-      } 
+  verifyToken(request, function(_id) {
+    if (!_id || _id === null) { reply(Boom.unauthorized()); return; }
+    
+    db.collection('users').findOne({ '_id': new ObjectID(_id) }, function (err, user) {
+      if (err) return console.error(err);
+      user.lists.forEach(function(userList) {
+        if (userList.id === listId) {
+          if (!userList.items) { userList.items = []; }
+          userList.items.push(newItem);
+        } 
+      });
+      db.collection('users').update({ '_id': new ObjectID(_id) }, user, {upsert: true}); 
+      reply(user);
     });
-    db.collection('users').update({}, user, {upsert: true});
-    reply(user);
   });
 };
 
 var removeItemFromList = function(request, reply) {
   var db = request.server.plugins['hapi-mongodb'].db;
+  var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
 
   const listId = request.params.listId;
   const itemId = request.params.itemId;
 
-  db.collection('users').findOne({}, function (err, user) {
-    if (err) return console.error(err);
-    user.lists.forEach(function(userList) {
-      if (userList.id === listId) {
-        console.log(userList.items);
-        userList.items = userList.items.filter(function(listItem) {
-          return listItem.id !== itemId; 
-        });
-      } 
+  verifyToken(request, function(_id) {
+    if (!_id || _id === null) { reply(Boom.unauthorized()); return; }
+    
+    db.collection('users').findOne({ '_id': new ObjectID(_id) }, function (err, user) {
+      if (err) return console.error(err);
+      user.lists.forEach(function(userList) {
+        if (userList.id === listId) {
+          userList.items = userList.items.filter(function(listItem) {
+            return listItem.id !== itemId; 
+          });
+        } 
+      });
+      db.collection('users').update({ '_id': new ObjectID(_id) }, user, {upsert: true});
+      reply(user);
     });
-    db.collection('users').update({}, user, {upsert: true});
-    reply(user);
   });
 };
 
 var updateItemInList = function(request, reply) {
   var db = request.server.plugins['hapi-mongodb'].db;
+  var ObjectID = request.server.plugins['hapi-mongodb'].ObjectID;
 
   const listId = request.params.listId;
   const itemId = request.params.itemId;
 
   var groceryListItem = request.payload;
 
-  db.collection('users').findOne({}, function (err, user) {
-    if (err) return console.error(err);
+  verifyToken(request, function(_id) {
+    if (!_id || _id === null) { reply(Boom.unauthorized()); return; }
     
-    user.lists.some(function(thisList) {
-      if (thisList.id === listId) {
-        thisList.items = thisList.items.filter(function(thisItem) {
-          return thisItem.id !== itemId;
-        });
-        thisList.items.push(groceryListItem);
-        return true;
-      }
+    db.collection('users').findOne({ '_id': new ObjectID(_id) }, function (err, user) {
+      if (err) return console.error(err);
+      
+      user.lists.some(function(thisList) {
+        if (thisList.id === listId) {
+          thisList.items = thisList.items.filter(function(thisItem) {
+            return thisItem.id !== itemId;
+          });
+          thisList.items.push(groceryListItem);
+          return true;
+        }
+      });
+              
+      db.collection('users').update({ '_id': new ObjectID(_id) }, user, {upsert: true});
+      reply(user);
     });
-            
-    db.collection('users').update({}, user, {upsert: true});
-    reply(user);
   });
 };
+
+var verifyToken = function(request, callback) {
+  const token = request.headers.authorization; 
+  jwt.verify(token, superSecret, function(err, decoded) {
+    callback(decoded.sub);
+  });
+}
 
 module.exports = [
     {

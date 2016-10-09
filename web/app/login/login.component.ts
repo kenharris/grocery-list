@@ -21,13 +21,23 @@ export class LoginComponent {
     loginError: boolean = false;
     loginErrorMessage: string;
 
+    signupError: boolean = false;
+    signupErrorMessage: string;
+
     constructor(private userService: UserService, private cookieService: CookieService,
                 private router: Router) { }
 
     signup(email: string, password: string, isValid: boolean) {
         this.userService
             .signUp(email, password)
-            .then(userData => console.log(userData));
+            .then(tokenData => {
+                    this.cookieService.put('token', tokenData.token);
+                    this.router.navigate(['/grocery']);
+                },
+                error => {
+                    this.signupError = true;
+                    this.signupErrorMessage = error;
+                })
     } 
 
     login(email: string, password: string, isValid: boolean) {

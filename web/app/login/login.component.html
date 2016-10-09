@@ -14,14 +14,14 @@
                 <div class="form-group" 
                       [ngClass]="{'has-success': lEmail.valid, 'has-error': !lEmail.valid && !lEmail.pristine}">
                   <label class="control-label col-sm-4 col-md-12" for="login-email">Email:</label>
-                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" 
+                  <input class="form-control col-sm-8 col-md-10" 
                           name="loginEmail" required type="email" id="login-email" 
                           [(ngModel)]="loginEmail" #lEmail="ngModel" />
                 </div>
                 <div class="form-group"
                       [ngClass]="{'has-success': lPassword.valid}">
                   <label class="control-label col-sm-4 col-md-12" for="login-password">Password:</label>
-                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" 
+                  <input class="form-control col-sm-8 col-md-10" 
                           name="loginPassword" required type="password" id="login-password" 
                           [(ngModel)]="loginPassword" #lPassword="ngModel" />
                 </div>
@@ -48,24 +48,25 @@
             <form (ngSubmit)="signup(sEmail.value, sPassword.value, signupForm.valid)" #signupForm="ngForm">
               <fieldset>
                 <legend>Sign Up</legend>
+                <div [hidden]="!signupError" class="alert alert-danger">{{ signupErrorMessage }}</div>
                 <div class="form-group"
                       [ngClass]="{'has-success': sEmail.valid, 'has-error': !sEmail.valid && !sEmail.pristine}">
                   <label class="control-label col-sm-4 col-md-12" for="signup-email">Email:</label>
-                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" 
+                  <input class="form-control col-sm-8 col-md-10" 
                           name="sEmail" type="email" id="signup-email" required 
                           [(ngModel)]="signupEmail" #sEmail="ngModel" />
                 </div>
                 <div class="form-group"
                       [ngClass]="{'has-success': sPassword.valid, 'has-error': !sPassword.valid && !sPassword.pristine}">
                   <label class="control-label col-sm-4 col-md-12" for="signup-password">Password:</label>
-                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" name="sPassword" 
+                  <input class="form-control col-sm-8 col-md-10" name="sPassword" 
                           type="password" id="signup-password" required validateEqual="sConfirm" reverse="true"
                           [(ngModel)]="signupPassword" #sPassword="ngModel" />
                 </div>
                 <div class="form-group"
                       [ngClass]="{'has-success': sConfirm.valid, 'has-error': !sConfirm.valid && !sConfirm.pristine}">
                   <label class="control-label col-sm-4 col-md-12" for="signup-confirmpassword">Confirm Password:</label>
-                  <input class="form-control col-sm-8 col-md-10 col-md-offset-1" name="sConfirm"
+                  <input class="form-control col-sm-8 col-md-10" name="sConfirm"
                           type="password" id="signup-confirmpassword" required validateEqual="sPassword"
                           [(ngModel)]="signupConfirmPassword" #sConfirm="ngModel" />
                 </div>
