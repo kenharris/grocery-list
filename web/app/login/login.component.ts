@@ -7,8 +7,7 @@ import { CookieService } from 'angular2-cookie/services/cookies.service';
 @Component({
     selector: 'my-login',
     templateUrl: './app/login/login.component.html',
-    styleUrls: [ './app/login/login.component.css' ],
-    providers: [ UserService ]
+    styleUrls: [ './app/login/login.component.css' ]    
 })
 export class LoginComponent { 
     loginEmail: string;
@@ -48,6 +47,7 @@ export class LoginComponent {
             .authenticate(email, password)
             .then(tokenData => {
                     this.cookieService.put('token', tokenData.token);
+                    this.userService.announceLogIn();
                     this.router.navigate(['/grocery']);
                 },
                 error => {

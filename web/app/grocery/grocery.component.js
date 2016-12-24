@@ -9,10 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var router_1 = require('@angular/router');
 var UserService_1 = require('../services/UserService');
 var GroceryComponent = (function () {
-    function GroceryComponent(userService) {
+    function GroceryComponent(userService, router) {
+        var _this = this;
         this.userService = userService;
+        this.router = router;
+        this.userService.authenticationAnnounced.subscribe(function (loggedIn) {
+            if (loggedIn === false) {
+                _this.router.navigate(['/login']);
+            }
+        });
     }
     GroceryComponent.prototype.ngOnInit = function () { this.getLists(); };
     GroceryComponent.prototype.getLists = function () {
@@ -45,10 +53,9 @@ var GroceryComponent = (function () {
         core_1.Component({
             selector: 'my-grocery',
             templateUrl: './app/grocery/grocery.component.html',
-            styleUrls: ['./app/grocery/grocery.component.css'],
-            providers: [UserService_1.UserService]
+            styleUrls: ['./app/grocery/grocery.component.css']
         }), 
-        __metadata('design:paramtypes', [UserService_1.UserService])
+        __metadata('design:paramtypes', [UserService_1.UserService, router_1.Router])
     ], GroceryComponent);
     return GroceryComponent;
 }());

@@ -1,4 +1,5 @@
 import { Component, OnInit }  from '@angular/core';
+import { Router } from '@angular/router';
 
 import { User } from '../models/User';
 import { UserService } from '../services/UserService';
@@ -6,14 +7,19 @@ import { UserService } from '../services/UserService';
 @Component({
     selector: 'my-grocery',
     templateUrl: './app/grocery/grocery.component.html',
-    styleUrls: [ './app/grocery/grocery.component.css' ],
-    providers: [UserService]
+    styleUrls: [ './app/grocery/grocery.component.css' ]
 })
 export class GroceryComponent implements OnInit {
   user: any;
   newListName: string;
 
-  constructor (private userService: UserService) {}
+  constructor (private userService: UserService, private router: Router) {
+    this.userService.authenticationAnnounced.subscribe(loggedIn => {
+      if (loggedIn === false) {
+        this.router.navigate(['/login']);
+      }
+    });
+  }
   ngOnInit() { this.getLists(); }
 
   getLists() {

@@ -5,6 +5,8 @@ import { User } from '../models/User';
 import { GroceryListItem } from '../models/GroceryListItem'
 
 import { Observable } from 'rxjs/Observable';
+import { Subject } from 'rxjs/Subject';
+
 import { CookieService } from 'angular2-cookie/services/cookies.service';
 
 @Injectable()
@@ -12,6 +14,9 @@ export class UserService {
   private apiUrl = 'http://localhost:3002';
   private apiListsUrl = this.apiUrl + '/lists';
   private apiUsersUrl = this.apiUrl + '/users';
+
+  private authenticationSource = new Subject<boolean>();
+  public authenticationAnnounced = this.authenticationSource.asObservable(); 
 
   constructor (private http: Http, private cookieService: CookieService) {}
 
@@ -95,6 +100,22 @@ export class UserService {
                     .map(this.extractData)
                     .toPromise()
                     .catch(this.handleError);
+  }
+
+  logOut(): void {
+    this.cookieService.remove('token');
+  }
+
+  isLoggedIn(): boolean {
+    return this.cookieService.get('token') != null;
+  }
+
+  announceLogIn(): void {
+    this.authenticationSource.next(true);
+  }
+
+  announceLogOut(): void {
+    this.authenticationSource.next(false);
   }
 
   private extractData(res: Response): User {

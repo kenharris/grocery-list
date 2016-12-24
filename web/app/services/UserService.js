@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var http_1 = require('@angular/http');
 var Observable_1 = require('rxjs/Observable');
+var Subject_1 = require('rxjs/Subject');
 var cookies_service_1 = require('angular2-cookie/services/cookies.service');
 var UserService = (function () {
     function UserService(http, cookieService) {
@@ -19,6 +20,8 @@ var UserService = (function () {
         this.apiUrl = 'http://localhost:3002';
         this.apiListsUrl = this.apiUrl + '/lists';
         this.apiUsersUrl = this.apiUrl + '/users';
+        this.authenticationSource = new Subject_1.Subject();
+        this.authenticationAnnounced = this.authenticationSource.asObservable();
     }
     UserService.prototype.getUser = function () {
         var headers = new http_1.Headers();
@@ -85,6 +88,18 @@ var UserService = (function () {
             .map(this.extractData)
             .toPromise()
             .catch(this.handleError);
+    };
+    UserService.prototype.logOut = function () {
+        this.cookieService.remove('token');
+    };
+    UserService.prototype.isLoggedIn = function () {
+        return this.cookieService.get('token') != null;
+    };
+    UserService.prototype.announceLogIn = function () {
+        this.authenticationSource.next(true);
+    };
+    UserService.prototype.announceLogOut = function () {
+        this.authenticationSource.next(false);
     };
     UserService.prototype.extractData = function (res) {
         var body = res.json();

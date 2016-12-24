@@ -11,16 +11,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 require('./rxjs-operators');
 var cookies_service_1 = require('angular2-cookie/services/cookies.service');
+var UserService_1 = require('./services/UserService');
 var AppComponent = (function () {
-    function AppComponent() {
+    function AppComponent(userService) {
+        this.userService = userService;
     }
+    AppComponent.prototype.logOut = function (e) {
+        console.log("Logged Out!");
+        console.log(e);
+        this.userService.announceLogOut();
+    };
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
             templateUrl: './app/app.component.html',
-            providers: [cookies_service_1.CookieService]
+            providers: [cookies_service_1.CookieService, UserService_1.UserService]
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [UserService_1.UserService])
     ], AppComponent);
     return AppComponent;
 }());

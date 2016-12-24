@@ -40,6 +40,7 @@ var LoginComponent = (function () {
             .authenticate(email, password)
             .then(function (tokenData) {
             _this.cookieService.put('token', tokenData.token);
+            _this.userService.announceLogIn();
             _this.router.navigate(['/grocery']);
         }, function (error) {
             _this.loginError = true;
@@ -50,8 +51,7 @@ var LoginComponent = (function () {
         core_1.Component({
             selector: 'my-login',
             templateUrl: './app/login/login.component.html',
-            styleUrls: ['./app/login/login.component.css'],
-            providers: [UserService_1.UserService]
+            styleUrls: ['./app/login/login.component.css']
         }), 
         __metadata('design:paramtypes', [UserService_1.UserService, cookies_service_1.CookieService, router_1.Router])
     ], LoginComponent);
